@@ -1,0 +1,17 @@
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+1 PRETTY_NAME-"Ubuntu 22.04.3 LTS"
+2 NAME="Ubuntu"
+3 VERSION_ID="22.04'
+4 VERSION="22.04.3 LTS (Jammy Jellyfish)"
+5 VERSION_CODENAME=-jammy
+6 ID=ubuntu
+7 ID LIKE=debian
+8 HOME_URL-"https://www.ubuntu.com/"
+9 SUPPORT_URL="https://help.ubuntu.com/"
+10 BUG_REPORT_URL-"https://bugs.launchpad.net/ubuntu/"  
+11 ﻿﻿﻿PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+12 ﻿﻿﻿UBUNTU_CODENAME-jammy
