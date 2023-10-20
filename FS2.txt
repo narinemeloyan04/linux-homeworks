@@ -1,0 +1,67 @@
+#include <iostream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+
+
+
+#define bufferSize 10
+
+
+int main(int argc, char** argv){
+
+    // Check if there are not enough command-line arguments.
+    if(argc < 2){
+        std::cerr << "Provide file path." << std::endl;
+        exit(1);
+    }
+    char* file = argv[1];
+     
+    // Open the file in read-only mode.
+    int fd = open(file, O_RDONLY);
+
+    // Check if the file couldn't be opened.
+    if(fd < 0){
+        std::cerr << strerror(errno) << std::endl;
+        exit(errno);
+    }
+
+    char buffer[bufferSize];
+    
+    while(true){
+        // Read the file.
+        ssize_t readingBytes = read(fd, buffer, bufferSize);
+
+        // Check if there was an error while reading.
+        if(readingBytes < 0){
+            std::cerr << strerror(errno) << std::endl;
+            exit(errno);
+        }   
+        
+        // Check if the end of the file has been reached.
+        if(readingBytes == 0){
+            break;
+        }
+        
+        buffer[readingBytes] = '\0';
+
+        // Print the content of the buffer to standard output. 
+        std::cout << buffer;        
+    }
+
+    // Close the file using the file descriptor.
+    int closeResult = close(fd);
+
+    // Check if there was an error while closing the file.
+    if(closeResult < 0){
+            std::cerr << strerror(errno) << std::endl;
+            exit(errno);
+        }  
+        
+    return 0;    
+
+}
+
