@@ -8,9 +8,8 @@
 
 #define bufferSize 10
 
+int main(int argc, char** argv ){
 
-int main(int argc, char** argv )
-{
    // Check if there are not enough command-line arguments.
    if(argc < 2) {
     std::cerr << " Provide file path." << std::endl;
