@@ -1,0 +1,87 @@
+#include <iostream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+
+#define bufferSize 10
+
+
+int main(int argc, char** argv )
+{
+   // Check if there are not enough command-line arguments.
+   if(argc < 2) {
+    std::cerr << " Provide file path." << std::endl;
+    exit(1);
+   }
+
+   char* file = argv[1];
+   char* newFile = argv[2];
+
+   // Open the file in read-only mode.
+   int fdFile = open(file, O_RDONLY);
+   
+   // Check if the file couldn't be opened.
+   if(fdFile < 0){
+    std::cerr << strerror(errno) << std::endl;
+    exit(errno);
+   }
+   
+   char buffer[bufferSize];
+   
+   // Open the new file in read-only mode.
+   int newFd = open(newFile, O_WRONLY | O_CREAT | O_TRUNC , S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+   // Check if the file couldn't be opened.
+   if(newFd < 0){
+    std::cerr << strerror(errno) << std::endl;
+    exit(errno);
+   }
+   
+   while(true){
+      // Read the file.
+      ssize_t readBytes = read(fdFile, buffer, bufferSize);
+
+      // Check if there was an error while reading.
+      if(readBytes < 0){
+         std::cerr << strerror(errno) << std::endl;
+         exit(errno);
+      } 
+
+      // Check if the end of the file has been reached.
+      if(readBytes == 0){
+        break;
+      }
+      
+      // Write in the new file.
+      ssize_t writeBytes = write(newFd, buffer, readBytes);
+
+      // Check if there was an error while writing.
+      if(writeBytes < 0)
+      {
+         std::cerr << strerror(errno) << std::endl;
+         exit(errno);
+      } 
+   }
+   // Close the file using the file descriptor.
+   int closeFile = close(fdFile);
+  
+   // Check if there was an error while closing the file.
+   if(closeFile < 0){
+    std::cerr << strerror(errno) << std::endl;
+    exit(errno);
+   }
+
+   int closeNewFile = close(newFd);
+
+   // Check if there was an error while closing the file.
+   if(closeNewFile < 0){
+    std::cerr << strerror(errno) << std::endl;
+    exit(errno);
+   }
+
+   return 0;
+
+}
