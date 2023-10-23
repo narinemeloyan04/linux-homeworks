@@ -1,0 +1,51 @@
+#include <iostream>
+#include <fstream>
+#include <unistd.h>
+#include <fcntl.h>
+#include <cstdlib>
+#include <string>
+
+
+void initialize(int argc, char** argv) {
+    if (argc < 3) {
+        std::cerr << "No file path provided: " << std::endl;
+        exit(1);
+    }
+
+    char* inputFile = argv[1];
+    int fd = open(inputFile, O_RDONLY);
+
+    if (fd < 0) {
+        std::cerr << strerror(errno)<< std::endl;
+        exit(errno);
+    }
+
+    // Redirect standard input (0) to the file
+    if (dup2(fd, 0) < 0) {
+        std::cerr << strerror(errno)<< std::endl;
+        exit(errno);
+    }
+
+    close(fd);
+}
+
+std::string Reverse(const std::string& input) {
+    return std::string(input.rbegin(), input.rend());
+}
+
+int main(int argc, char** argv) {
+    // Initialize the program based on the requirements
+    initialize(argc, argv);
+
+    // Read the string
+    std::string input;
+    std::cin >> input;
+
+    // Reverse the string
+    std::string reversed = Reverse(input);
+
+    // Print the reversed string to the console
+    std::cout << reversed << std::endl;
+
+    return 0;
+}
